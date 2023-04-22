@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Experiment</title>
+  
+    <link href="https://unpkg.com/jspsych@7.2.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href='css/jquery-ui-edit.css' />
+
+    <style> 
+    .jspsych-btn {
+      margin-bottom: 20px;
+    }
+    #jspsych-survey-multi-choice-form {
+      padding: 20px;
+    }
+    #jspsych-survey-html-form-next{
+      visibility: hidden;
+    }
+    .slidecontainer {
+      width: 70%;
+      text-align: center;
+      position: center;
+      margin: auto;
+    }
+    .slider-container {
+        width: 70%;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        position: center;
+        margin: auto;
+    }
+    .slider-label {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 7px;
+  border-radius: 10px;
+  background: #ddd;
+  outline: none;
+}
+
+.unclicked::-webkit-slider-thumb {
+  opacity:0;
+}
+
+.clicked::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  background: blue;
+  cursor: pointer;
+}
+
+  </style>;
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/jspsych@7.2.3"></script>
+  <script src='js/utils.js'></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.1"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.1"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.1"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.1"></script>
+  <script src='js/jspsych-html-slider-response-custom.js'></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.1"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.1"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.1"></script>
+  <script src="https://proliferate.alps.science/static/js/proliferate.js"> </script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.1"></script>
+  <script src='js/trial_data.js'></script>
+
+
+
+</head>
+
+<body></body>
+<script>
+
+  let timeline = []
+
+
+  // Data display and storage
+
+  let jsPsych = initJsPsych(
+    {
+      show_progress_bar: true,
+      on_finish: () => {
+        jsPsych.data.displayData();
+
+        let responseData = {};
+
+        for (const scenarioPage of jsPsych.data.get().filter({ task: "judgments" }).values()) {
+          const trialCondition = scenarioPage["condition"];
+          const scenarioIdx = scenarioPage["scenario_idx"];
+          const scenario = scenarioPage["scenario"];
+          responseData[`scenario${scenarioIdx}`] = scenarioPage["scenario"];
+          responseData["condition"] = scenarioPage["condition"];
+          responseData[`scenario${scenarioIdx}_response_first`] = Number(scenarioPage.response.first);
+          responseData[`scenario${scenarioIdx}_response_second`] = Number(scenarioPage.response.second);
+        }
+        console.log(responseData);
+
+        let feedback = jsPsych.data.get().filter({ "page_type": "exit_survey" }).values()[0]["response"].feedback
+        let gender = jsPsych.data.get().filter({ "page_type": "exit_survey" }).values()[0]["response"].gender
+        if (gender == "other_gender" || typeof gender == "undefined") {
+          gender = "other_gender"
+        };
+        let age = parseInt(jsPsych.data.get().filter({ "page_type": "exit_survey" }).values()[0]["response"].age)
+        let race = jsPsych.data.get().filter({ "page_type": "exit_survey" }).values()[0]["response"].race
+        if (race == "other_race" || typeof race == "undefined") {
+          race = "other_race"
+        };
+        let ethnicity = jsPsych.data.get().filter({ "page_type": "exit_survey" }).values()[0]["response"].ethnicity
+        if (typeof ethnicity == "undefined") {
+          ethnicity = ""
+        }
+        let demographics = {
+          "feedback": feedback,
+          "age": age,
+          "gender": gender,
+          "race": race,
+          "ethnicity": ethnicity
+        }
+
+        // combine all data 
+        let data_final = {
+          "responses": responseData,
+          "participants": demographics,
+        }
+
+        console.log(data_final)
+
+        proliferate.submit(data_final);
+
+        $('#jspsych-content').html('<div style="margin: auto;"> <p> Thank you for' +
+          ' participating in this experiment! </p> <p> Redirecting you back to' +
+          ' Prolific... </p>');
+        setTimeout(function () { }, 400);
+      }
+
+    })
+  // prolific
+
+
+  var condition = get_url_param("condition");
+
+  var trialCondition = ["condition1", "condition2", "condition3", "condition4"];
+
+  trialCondition = trialCondition[condition - 1];
+
+  console.log(trialCondition);
+
+
+  // Welcome display
+
+  var welcome = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<p><b>Consent Form</b></p> <div style="text-align:left;' +
+      'background-color:lightblue; padding:20px; max-width:900px;">' +
+      '<p><b>Description:</b> Welcome! You are invited to participate' +
+      ' in a research study in cognitive psychology. You will be asked' +
+      ' to perform various tasks on a computer which may include:' +
+      ' looking at images or videos, listening to sounds, reading' +
+      ' scenarios, or playing games. You may be asked a number of' +
+      // careful about single quotes
+      " different questions about making judgments and intepreting" +
+      " people's actions. All information collected will remain" +
+      ' confidential. </p>' +
+      ' <p> <b>Risks and benefits:</b> Risks involved in this study' +
+      ' are the same as those normally associated with using a' +
+      ' computer (e.g., mild eye/arm strain). If you have any pre-' +
+      ' existing conditions that might make reading and completing' +
+      ' a computer-based survey strenuous for you, you should' +
+      ' probably elect to not participate in this study. If at any' +
+      ' time during the study you feel unable to participate because' +
+      ' you are experiencing strain, you may end your participation' +
+      ' without penalty. We cannot and do guarantee or promise that' +
+      ' you will receive any benefits from this study. Your decision' +
+      ' whether or not to participate in this study will not affect' +
+      ' your employment, medical care, and/or grades in school. </p>' +
+      '<p><b>Time involvement:</b> Your participation in this' +
+      ' experiment will take 15-20 minutes. </p>' +
+      '<p><b> Payment:</b> If recruitment materials indicate payment' +
+      ' (e.g., Amazon or other recruitment), you will receive' +
+      ' compensation as indicated. </p>' +
+      "<p><b>Subject's rights:</b> If you have read this notice and" +
+      ' have decided to participate in this project, please understand' +
+      ' your participation is voluntary and you have the right to' +
+      ' withdraw your consent or discontinue participation at any' +
+      ' time without penalty or loss of benefits to which you are' +
+      ' otherwise entitled. You have the right to refuse to answer' +
+      ' particular questions. Your individual privacy will be' +
+      ' maintained in all published and written data resulting from' +
+      ' the study. </p>' +
+      '<p><b>Contact information:</b> If you have any questions,' +
+      ' concerns or complaints about this research study, its' +
+      ' procedures, or risks and benefits, you should ask the' +
+      ' Protocol Director, (Professor Tobias Gerstenberg, Phone:' +
+      ' (650) 725-2431; Email: gerstenberg@stanford.edu). </p>' +
+      '<p><b>Independent contact:</b> If you are not satisfied' +
+      ' with how this study is being conducted, or if you have' +
+      ' any concerns, complaints, or general questions about the' +
+      ' research or your rights as a participant, please contact' +
+      ' the Stanford Institutional Review Board (IRB) to speak' +
+      ' to someone independent of the research team via email at' +
+      ' irb2-manager@lists.stanford.edu, or via phone at' +
+      ' (650) 723-2480 or toll free at 1-866-680-2906. You can also' +
+      ' write to the Stanford IRB, Stanford University, 3000 El' +
+      ' Camino Real, Five Palo Alto Square, 4th Floor, Palo Alto,' +
+      ' CA 94306. </p>' +
+      '<p>You may want to print a copy of this consent form to' +
+      ' keep. By clicking the button below, you acknowledge that' +
+      ' you have read the above information, that you are 18 years' +
+      ' of age, or older and give your consent to participate in' +
+      ' our internet-based study and consent for us to analyze the' +
+      ' resulting data. </p> </div>' + '<p> Do you agree with the terms of the experiment as explained above? </p>',
+    prompt: '',
+    choices: ['I agree']
+
+  };
+  timeline.push(welcome)
+
+  // Instructions
+
+  var instructions1 = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+      '<p>In this experiment, you will read <em>four short scenarios</em> and answer a series of questions about these scenarios. <br>Before you start, we will walk you through the general setup so you understand how it works. <br><br> </p>',
+    prompt: '',
+    choices: ['Next']
+  };
+  timeline.push(instructions1)
+
+  var instructions2 = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+      '<br>Each story comes in two parts. <em>Please read each part carefully</em>. <br>You will be asked a couple of comprehension questions about the first part of the story, <br>and <em>it is crucial that that you pay close attention to the details</em>. <br><br>',
+    prompt: '',
+    choices: ['Next']
+  };
+  timeline.push(instructions2)
+
+  var instructions3 = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+      '<br>After that, you will be asked a few questions that more are concerned with your <em>evaluation and judgments</em> <br>about of some of the aspects in the story. <br>For this, we are interested in <em>your own personal opinion</em> and would like you to answer intuitively. <br><br>',
+    prompt: '',
+    choices: ['Next']
+  };
+  timeline.push(instructions3)
+
+  // const trialCondition = jsPsych.randomization.shuffle(["condition1", "condition2", "condition3", "condition4"])[0];
+  const scenarioList = jsPsych.randomization.shuffle(["fertilizer", "laundry", "paint", "sunscreen"]);
+  console.log(scenarioList);
+  console.log(trialData[trialCondition]);
+
+  let scenarioIdx = 1;
+  for (let i = 0; i < 4; i++) {
+    const trialPage1 = {
+      type: jsPsychSurveyMultiChoice,
+      data: {
+        page_type: 'comprehension_check',
+      },
+      preamble: `${trialData[trialCondition][scenarioList[i]]["intro"]}` + `${trialData[trialCondition][scenarioList[i]]["scenarioContext"]["page1"]}`,
+      questions: [
+        {
+          prompt: `${trialData[trialCondition][scenarioList[i]]["compre_questions"]["Question1"]}`,
+          options: [`${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question1"][0]}`, `${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question1"][1]}`],
+          required: true,
+          name: "Question1",
+        },
+        {
+          prompt: `${trialData[trialCondition][scenarioList[i]]["compre_questions"]["Question2"]}`,
+          options: [`${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question2"][0]}`, `${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question2"][1]}`, `${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question2"][2]}`],
+          required: true,
+          name: "Question2",
+        },
+        {
+          prompt: `${trialData[trialCondition][scenarioList[i]]["compre_questions"]["Question3"]}`,
+          options: [`${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question3"][0]}`, `${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question3"][1]}`],
+          required: true,
+          name: "Question3",
+        },
+        {
+          prompt: `${trialData[trialCondition][scenarioList[i]]["compre_questions"]["Question4"]}`,
+          options: [`${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question4"][0]}`, `${trialData[trialCondition][scenarioList[i]]["compre_options"]["Question4"][1]}`],
+          required: true,
+          name: "Question4",
+        },
+      ],
+      on_finish: function (data) {
+        console.log(data);
+        data.correct = true;
+        for (const question of ["Question1", "Question2", "Question3", "Question4"]) {
+          if (data.response[question][0] != trialData[trialCondition][scenarioList[i]]["scenarioContext"]["correct_compre"][question]) {
+            console.log("Selected:");
+            console.log(data.response[question][0]);
+            console.log("Answer:");
+            console.log(trialData[trialCondition][scenarioList[i]]["scenarioContext"]["correct_compre"][question]);
+            data.correct = false
+          };
+        }
+      }
+    };
+
+    function checkIfFailed(data) {
+      console.log(data.filter({ page_type: 'comprehension_check' }).last(1));
+      const isLastCorrect = data.filter({ page_type: 'comprehension_check' }).last(1).trials[0].correct;
+      console.log(`Are last 4 questions correctly answered: ${isLastCorrect}`);
+      return !isLastCorrect;
+    }
+
+    const comprehensionFailed = {
+      timeline: [{
+        type: jsPsychHtmlButtonResponse,
+        stimulus: 'Unfortunately, you missed some of the comprehension questions.</p> <p> Please review again.',
+        choices: ['Review'],
+      }],
+      conditional_function: () => checkIfFailed(jsPsych.data.get())
+    }
+
+    const comprehensionCheckGroup = {
+      timeline: [trialPage1, comprehensionFailed],
+      loop_function: checkIfFailed
+    }
+
+    timeline.push(comprehensionCheckGroup);
+
+    const trialPage2 = {
+      type: jsPsychSurveyHtmlForm,
+      html: `${trialData[trialCondition][scenarioList[i]]["page2"]}
+             <br><br>
+            ${trialData[trialCondition][scenarioList[i]]["slider_questions"]["q1"]}<br><br>
+            <div class="slidecontainer">
+              <div class="slider-container">
+                <div id="progressbar">
+                <input id = "slider1" name = "second" type="range" min="0" max="10" value="5" step="1" class="unclicked">
+                  <div class="slider-label">
+                    <label for="not at all" class="pull-left">not at all</label>
+                    <label for="very much" class="pull-right">very much</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            ${trialData[trialCondition][scenarioList[i]]["slider_questions"]["q2"]}<br><br>
+            <div class="slidecontainer">
+              <div class="slider-container">
+                <div id="progressbar">
+                <input id = "slider2" name = "second" type="range" min="0" max="10" value="5" step="1" class="unclicked">
+                  <div class="slider-label">
+                    <label for="not at all" class="pull-left">not at all</label>
+                    <label for="very much" class="pull-right">very much</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>`,
+      button_label: 'Continue',
+      data: {
+        task: 'judgments',
+        "condition": trialCondition,
+        "scenario": scenarioList[i],
+        "scenario_idx": scenarioIdx,
+      },
+    on_load: function() {
+    // console.log('setting slider...');
+    slider_clicked = [false, false]
+    set_slider(slider_clicked);
+      },
+    on_finish: function (data) {
+        console.log(data);
+        // store values
+        var temp0 = data.response;
+        // extract the response for the first slider
+        var temp = Number(temp0.first);
+        data.responseLeft = temp;
+        console.log(temp)
+        // extract the response for the second slider
+        var temp = Number(temp0.second);
+        data.responseRight = temp;
+        console.log(temp)
+      },
+    }
+    timeline.push(trialPage2);
+    scenarioIdx += 1;
+};
+
+  var feedback_demographics = {
+    type: jsPsychSurveyHtmlForm,
+    html: '<div style="max-width:700px; text-align:center;"> <p>' +
+      'What factors influenced how you decided to respond? Do you' +
+      ' have any questions or comments regarding the experiment?' +
+      // feedback box
+      '</p> <textarea name="feedback" cols="40" rows="6"' +
+      ' "autofocus"></textarea> <p> Please provide the following' +
+      ' information to complete the study. </p> <div style="text-' +
+      'align:center;"> <div style="text-align:left; display:' +
+      'inline-block; margin-right:20px; line-height:1.8em;"> <ol>' +
+      '<li>Age:</li> <br><br>' +
+      '<li>Gender:</li> <br><br>' +
+      '<li>Race:</li> <br><br><br><br><br><br>' +
+      '<li>Ethnicity:</li>' +
+      '</ol> </div>' +
+      '<div style="text-align:left; display: inline-block;' +
+      ' line-height:1.8em;">' +
+      // age text box
+      '<input name="age" type="number"  min="18" max="100" /> <br> <br>' +
+      // gender options
+      '<input name="gender" type="radio" id="female" value=' +
+      '"Female" /> <label for="female"> Female </label>' +
+      '<input name="gender" type="radio" id="male" value=' +
+      '"Male" /> <label for="male"> Male </label>' +
+      '<input name="gender" type="radio" id="nonbinary" value=' +
+      '"Non-binary" /> <label for="nonbinary"> Non-binary </label> <br>' +
+      '<input name="gender" type="radio" id="other_gender" value=' +
+      '"other_gender" /> <label for="other_gender"> Other: <input' +
+      ' type="text" name="other_gender" /> </label> <br><br>' +
+      // race options
+      '<input name="race" type="radio" id="white" value=' +
+      '"White" /> <label for="white"> White </label> <br>' +
+      '<input name="race" type="radio" id="black" value=' +
+      '"Black/African American" /> <label for="black">' +
+      ' Black/African American </label> <br>' +
+      '<input name="race" type="radio" id="am_ind" value=' +
+      '"American Indian/Alaska Native" /> <label for="am_ind">' +
+      ' American Indian/Alaska Native </label> <br>' +
+      '<input name="race" type="radio" id="asian" value=' +
+      '"Asian" /> <label for="asian"> Asian </label> <br>' +
+      '<input name="race" type="radio" id="pac_isl" value=' +
+      '"Native Hawaiian/Pacific Islander" /> <label for="pac_isl">' +
+      ' Native Hawaiian/Pacific Islander </label> <br>' +
+      '<input name="race" type="radio" id="multi" value=' +
+      '"Multiracial" /> <label for="multi"> Multiracial/Mixed </label> <br>' +
+      '<input name="race" type="radio" id="other_race" value="other_race" />' +
+      '<label for="other_race"> Other: <input type="text"' +
+      'name="other_race" /> </label> <br><br>' +
+      // ethnicity options
+      '<input name="ethnicity" type="radio" id="hisp" value=' +
+      '"Hispanic" /> <label for="hisp"> Hispanic </label>' +
+      '<input name="ethnicity" type="radio" id="nonhisp" value=' +
+      '"Non-Hispanic" /> <label for="nonhisp"> Non-Hispanic' +
+      ' </label>' +
+      '</div> </div>' +
+      '<p> Please press the finish button to complete the experiment. </p> </div>',
+    button_label: 'Finish',
+    on_load: function() {
+    console.log('enable continue button...');
+    enable_continue();
+     },
+    data: {
+      "page_type": 'exit_survey',
+    },
+  };
+
+
+  timeline.push(feedback_demographics)
+
+  jsPsych.run(timeline);
+
+</script>
+
+</html>

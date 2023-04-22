@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Experiment Willful Ignorance </title>
+
+        <link rel="stylesheet" href='css/jspsych.css' />
+        <link rel="stylesheet" href='css/jquery-ui-slider-pips-edit.css' />
+        <link rel="stylesheet" href='css/jquery-ui-edit.css' />
+
+        <script src='js/jquery.min.js'></script>
+        <script src='js/jquery-ui.min.js'></script>
+        <script src="js/jquery-ui-slider-pips.js"></script>
+        <script src='https://proliferate.alps.science/static/js/proliferate.js'></script>
+
+        <script src='js/judge-cause.js'></script>
+        <script src='js/jspsych.js'></script>
+        <script src='js/jspsych-instructions.js'></script>
+        <script src='js/jspsych-button.js'></script>
+        <script src='js/jspsych-html-slider-response-custom.js'></script>
+        <script src='js/jspsych-multi-choice.js'></script>
+        <script src='js/jspsych-form.js'></script>
+        <script src='js/craftspeople.js'></script>
+        <script src='js/s_choosing.js'></script>
+        <script src='js/f_knowledge.js'></script>
+        <script src='js/p_not_choosing.js'></script>
+        <script src='js/l_knowledge.js'></script>
+        <script src='js/decision.js'></script>
+        <script src='js/utils.js'></script>
+        <script src='js/trial_info.js'></script>
+        <script src='js/demographics.js'></script>
+    </head>
+    </body></body>
+    <script>
+        var testing = false;
+
+        // create timeline
+        timeline = [];
+
+        // display welcome screen
+        var welcome = {
+            type: 'html-button-response',
+            stimulus: '<p><b>Consent Form</b></p> <div style="text-align:left;' +
+                'background-color:lightblue; padding:20px; max-width:900px;">' +
+                '<p><b>Description:</b> Welcome! You are invited to participate' +
+                ' in a research study in cognitive psychology. You will be asked' +
+                ' to perform various tasks on a computer which may include:' +
+                ' looking at images or videos, listening to sounds, reading' +
+                ' scenarios, or playing games. You may be asked a number of' +
+                // careful about single quotes
+                " different questions about making judgments and intepreting" +
+                " people's actions. All information collected will remain" +
+                ' confidential. </p>' +
+                ' <p> <b>Risks and benefits:</b> Risks involved in this study' +
+                ' are the same as those normally associated with using a' +
+                ' computer (e.g., mild eye/arm strain). If you have any pre-' +
+                ' existing conditions that might make reading and completing' +
+                ' a computer-based survey strenuous for you, you should' +
+                ' probably elect to not participate in this study. If at any' +
+                ' time during the study you feel unable to participate because' +
+                ' you are experiencing strain, you may end your participation' +
+                ' without penalty. We cannot and do guarantee or promise that' +
+                ' you will receive any benefits from this study. Your decision' +
+                ' whether or not to participate in this study will not affect' +
+                ' your employment, medical care, and/or grades in school. </p>' +
+                '<p><b>Time involvement:</b> Your participation in this' +
+                ' experiment will take 5-10 minutes. </p>' +
+                '<p><b> Payment:</b> If recruitment materials indicate payment' +
+                ' (e.g., Amazon or other recruitment), you will receive' +
+                ' compensation as indicated. </p>' +
+                "<p><b>Subject's rights:</b> If you have read this notice and" +
+                ' have decided to participate in this project, please understand' +
+                ' your participation is voluntary and you have the right to' +
+                ' withdraw your consent or discontinue participation at any' +
+                ' time without penalty or loss of benefits to which you are' +
+                ' otherwise entitled. You have the right to refuse to answer' +
+                ' particular questions. Your individual privacy will be' +
+                ' maintained in all published and written data resulting from' +
+                ' the study. </p>' +
+                '<p><b>Contact information:</b> If you have any questions,' +
+                ' concerns or complaints about this research study, its' +
+                ' procedures, or risks and benefits, you should ask the' +
+                ' Protocol Director, (Professor Tobias Gerstenberg, Phone:' +
+                ' (650) 725-2431; Email: gerstenberg@stanford.edu). </p>' +
+                '<p><b>Independent contact:</b> If you are not satisfied' +
+                ' with how this study is being conducted, or if you have' +
+                ' any concerns, complaints, or general questions about the' +
+                ' research or your rights as a participant, please contact' +
+                ' the Stanford Institutional Review Board (IRB) to speak' +
+                ' to someone independent of the research team via email at' +
+                ' irb2-manager@lists.stanford.edu, or via phone at' +
+                ' (650) 723-2480 or toll free at 1-866-680-2906. You can also' +
+                ' write to the Stanford IRB, Stanford University, 3000 El' +
+                ' Camino Real, Five Palo Alto Square, 4th Floor, Palo Alto,' +
+                ' CA 94306. </p>' +
+                '<p>You may want to print a copy of this consent form to' +
+                ' keep. By clicking the button below, you acknowledge that' +
+                ' you have read the above information, that you are 18 years' +
+                ' of age, or older and give your consent to participate in' +
+                ' our internet-based study and consent for us to analyze the' +
+                ' resulting data. </p> </div>' +
+                '<p> Do you agree with the terms of the experiment as explained' +
+                ' above? </p>',
+            choices: ['I agree']
+        }
+
+
+
+        //----------------------------INSTRUCTIONS 1----------------------------//
+
+        var instructions = {
+            type: 'instructions',
+            pages: [
+                '<p>In this experiment, you will read <em>four short scenarios</em> and answer a series of questions about these scenarios. Before you start, we will walk you through the general setup so you understand how it works. <br><br> </p>',
+                '<br>Each story comes in two parts. <em>Please read each part carefully</em>. You will be asked a couple of comprehension questions about the first part of the story, and <em>it is crucial that that you pay close attention to the details</em>. <br><br>',
+                '<br>After that, you will be asked a few questions that more are concerned with your <em>evaluation and judgments</em> about of some of the aspects in the story. For this, we are interested in <em>your own personal opinion</em> and would like you to answer intuitively. <br><br>',
+                ],
+            on_load: set_slider(),
+            show_clickable_nav: true,
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.025);
+            }
+        };
+
+     //-------------------------------- Fertilizer: No Knowledge ------------//
+     var loop_f_knowledge_1 = [];
+    
+     var options0 = ['the enzyme in \"GreenLine\" harms wildlife.', 'the enzyme in \"GreenLine\" does not harm wildlife.']
+     var options1 = ['fails to mention the existence of the new study.', 'mentions the existence of the new study, but not what it finds.<br>', 'mentions the existence of the new study and also what it finds.']
+     var options2 = ['only what\'s in the report.', 'what\'s in the report and also decided to look into the new study.']
+     var options3 = ['knows that \"GreenLine\" harms wildlife.', 'does not know that \"GreenLine\" harms wildlife.']
+     
+     var f_knowledge_1 = {
+            type: 'survey-multi-choice',
+            questions: [
+                {
+                    prompt: '<b>Question 1:</b> A new study finds that...',
+                    options: options0,
+                    horizontal: false
+                },
+                {
+                    prompt: '<b>Question 2:</b> A recently published research report...',
+                    options: options1,
+                    horizontal: false
+                },
+                {
+                    prompt: '<b>Question 3:</b> Taylor read... ',
+                    options: options2,
+                    horizontal: false
+                },
+                {
+                    prompt: '<b>Question 4:</b> This means that Taylor... ',
+                    options: options3,
+                    horizontal: false
+                }
+            
+            ],
+            preamble:'<div style="text-align:left;background-color:white; padding:20px; max-width:900px;">' + '<h4><center>Scenario Part 1</center></h4>' +    
+             'Taylor is the CEO of a company for farming supplies. The company plans to produce and sell a new fertilizer for agricultural farming, \"GreenLine\". ' +
+             'If launched,  \"GreenLine\" would significantly increase the company\'s profits. <br><br> However, this new fertilizer includes a relatively unknown enzyme. It is possible that this enzyme would harm local wildlife if released into the ground. <br><br>'+
+             'If this were the case, applying \"GreenLine\" would still effectively fertilize farmland, but also kill small animals like bees, birds, and rodents. <br><br>'+
+             'The decision is now with Taylor. The new fertilizer will only go into production if Taylor approves it. <br><br>'+
+             'There is a new scientific study showing that the <b>enzyme in \"GreenLine\" does indeed harm wildlife</b>.<br><br>'+
+             'Taylor has read a recently published report that summarizes existing research on the new enzyme. However, the <b>report fails to mention the existence of the new study and what the study finds</b>: the harmful effect of the enzyme in \"GreenLine\" on wildlife. <br><br>'+
+             'This means that <b>Taylor does not know</b> that \"GreenLine\" harms wildlife.',
+            on_finish: function(data){
+                // jspsych records responses as json strings
+                data.correct = (data.responses == '{"Q0":"the enzyme in \"GreenLine\" harms wildlife.","Q1":"fails to mention the existence of the new study.","Q2":"only what\'s in the report.","Q3":"does not know that \"GreenLine\" harms wildlife."}');
+            }
+        };
+
+        var fail_f_knowledge_1 = {
+            timeline: [{
+                type: 'html-button-response',
+                stimulus: 'Unfortunately, you missed some of the comprehension ' +
+                    'questions.</p> <p> Please review the instructions again.',
+                choices: ['Review'],
+            }],
+            conditional_function: function(){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        };
+        
+        var loop_node_f_knowledge_1 = {
+            timeline: loop_f_knowledge_1,
+            loop_function: function(data){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        };  
+
+        var f_knowledge_2 = {
+        type: 'f_knowledge',
+        slide: "images/Experiment 2 Stimulus Materials_NEW/Evaluation Task/criticality_pic.jpg",
+        prompt: "How important do you think each player is for the outcome of the one-goal challenge?",
+        people: ['player1_deepred', 'player1_purple']
+        };
+
+
+      //----------------------------INTERMEDIATE MESSAGE 1----------------------------//
+
+            var message_1 = {
+            type: 'instructions',
+            pages: [
+                '<p>Well done. You will now see a few more scenarios and be asked for your judgments about these.</p>',
+                ],
+            on_load: set_slider(),
+            show_clickable_nav: true,
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.025);
+            }
+        };
+
+//-------------------------------- Laundry: Knowledge ------------//
+
+    var loop_l_knowledge_1 = [];
+    
+    var options0 = ['the chemical in \"HomeStyle\" pollutes water.', 'the chemical in \"HomeStyle\" does not pollute water.']
+    var options1 = ['fails to mention the existence of the new study.', 'mentions the existence of the new study, but not what it finds.', 'mentions the existence of the new study and also what it finds.']
+    var options2 = ['only the report.', 'the report and the new study.']
+    var options3 = ['entirely unaware that \"HomeStyle\" pollutes water.', 'entirely aware that \"HomeStyle\" pollutes water.']
+    
+    var l_knowledge_1 = {
+           type: 'survey-multi-choice',
+           questions: [
+               {
+                   prompt: 'A new study finds that ...',
+                   options: options0,
+                   horizontal: true
+               },
+               {
+                   prompt: 'A recently published research report ...',
+                   options: options1,
+                   horizontal: true
+               },
+               {
+                   prompt: 'Marc read... ',
+                   options: options2,
+                   horizontal: true
+               },
+               {
+                   prompt: 'Marc is ... ',
+                   options: options3,
+                   horizontal: true
+               }
+           
+           ],
+           preamble: '<div style="text-align:left;background-color:white; padding:20px; max-width:900px;">' +    
+            'Marc is the CEO of a company for laundry products. The company is planning to produce and sell a new laundry detergent, \"HomeStyle\". ' +
+            'If launched, \"HomeStyle\" would significantly increase the company\'s profits. <br><br> However, the new laundry detergent includes a relatively unknown chemical. It is possible that the chemical would lead to excessive algal growth if released into the flow of waste water. <br><br>'+
+            'If this were the case, using the new laundry detergent \"HomeStyle\" would still effectively clean clothes, but also pollute local water systems. <br><br>'+
+            'The decision is now with Marc. The new laundry detergent will only go into production if Marc approves it. <br><br>'+
+            'There is a new scientific study showing that the new chemical in \"HomeStyle\" does indeed pollute water. <br><br>'+
+            'Marc has read a recently published report that summarizes existing research on the new chemical. The report mentions the existence of the new study, and it also mentions what the study finds: the harmful effect of the chemical in \"HomeStyle\" on local water systems. <br><br>'+
+            'Irrespective of these studies, Marc already knew that \"HomeStyle\" pollutes water. <br><br>'+
+            'This means that Marc is entirely aware that \"HomeStyle\" would pollute water',
+           on_finish: function(data){
+               // jspsych records responses as json strings
+               data.correct = (data.responses == '{"Q0":"the enzyme in \"GreenLine\" harms wildlife.","Q1":"fails to mention the existence of the new study.","Q2":"only the report.","Q3":"entirely unaware that \"GreenLine\" harms wildlife."}');
+           }
+       };
+
+       var fail_l_knowledge_1 = {
+           timeline: [{
+               type: 'html-button-response',
+               stimulus: 'Unfortunately, you missed some of the comprehension ' +
+                   'questions.</p> <p> Please review the instructions again.',
+               choices: ['Review'],
+           }],
+           conditional_function: function(){
+               var data = jsPsych.data.get().last(1).values()[0];
+               return !(data.correct);
+           }
+       };
+       
+       var loop_node_l_knowledge_1 = {
+           timeline: loop_f_knowledge_1,
+           loop_function: function(data){
+               var data = jsPsych.data.get().last(1).values()[0];
+               return !(data.correct);
+           }
+       };  
+
+       var l_knowledge_2 = {
+       type: 'l_knowledge',
+       slide: "images/Experiment 2 Stimulus Materials_NEW/Evaluation Task/criticality_pic.jpg",
+       prompt: "How important do you think each player is for the outcome of the one-goal challenge?",
+       people: ['player1_deepred', 'player1_purple']
+       };
+
+//-------------------------------- Sun screen: Choosing to Know ------------//
+
+var loop_s_choosing_1 = [];
+    
+    var options0 = ['the UV absorber in \"SafeSol\" harms aquatic plants.', 'the UV absorber in \"SafeSol\" does not harm aquatic plants.']
+    var options1 = ['fails to mention the existence of the new study.', 'mentions the existence of the new study, but not what it finds.', 'mentions the existence of the new study and also what it finds.']
+    var options2 = ['only the report.', 'the report and the new study.']
+    var options3 = ['entirely unaware that \"SafeSol\" harms aquatic plants.', 'entirely aware that \"SafeSol\" harms aquatic plants.']
+    
+    var s_choosing_1 = {
+           type: 'survey-multi-choice',
+           questions: [
+               {
+                   prompt: 'A new study finds that ...',
+                   options: options0,
+                   horizontal: true
+               },
+               {
+                   prompt: 'A recently published research report ...',
+                   options: options1,
+                   horizontal: true
+               },
+               {
+                   prompt: 'April read... ',
+                   options: options2,
+                   horizontal: true
+               },
+               {
+                   prompt: 'April is ... ',
+                   options: options3,
+                   horizontal: true
+               }
+           
+           ],
+           preamble: '<div style="text-align:left;background-color:white; padding:20px; max-width:900px;">' +    
+            'April is the CEO of a company for sun products. The company is planning to produce and sell a new sunscreen, \"SafeSol\".  ' +
+            'If launched, \"SafeSol\" would significantly increase the company\'s profits. <br><br> However, the new sunscreen is made with a relatively new type of UV absorber. It is possible that the UV absorber weakens the protection film of aquatic plants if washed into oceans. <br><br>'+
+            'If this was the case, using the new sun screen \"SafeSol\" would still effectively protect people from sunburn, but also destroy coral reefs. <br><br>'+
+            'The decision is now with April. The new sun screen will only go into production if April approves it. <br><br>'+
+            'There is a new scientific study showing that the lotion in \"SafeSol\" does indeed harm aquatic plants.<br><br>'+
+            'April has read a research report that has recently been published summarizing existing research on the new lotion. The report mentions the existence of the new study, but it does not mention what the study finds: the harmful effect of the lotion in \"SafeSol\" on aquatic plants <br><br>'+
+            'April decided to look into the new study and learn what the study finds. <br><br>'+
+            'This means that April is entirely aware that \"SafeSol\" harms aquatic plants.',
+           on_finish: function(data){
+               // jspsych records responses as json strings
+               data.correct = (data.responses == '{"Q0":"the enzyme in \"GreenLine\" harms wildlife.","Q1":"fails to mention the existence of the new study.","Q2":"only the report.","Q3":"entirely unaware that \"GreenLine\" harms wildlife."}');
+           }
+       };
+
+       var fail_s_choosing_1 = {
+           timeline: [{
+               type: 'html-button-response',
+               stimulus: 'Unfortunately, you missed some of the comprehension ' +
+                   'questions.</p> <p> Please review the instructions again.',
+               choices: ['Review'],
+           }],
+           conditional_function: function(){
+               var data = jsPsych.data.get().last(1).values()[0];
+               return !(data.correct);
+           }
+       };
+       
+       var loop_node_s_choosing_1 = {
+           timeline: loop_s_choosing_1,
+           loop_function: function(data){
+               var data = jsPsych.data.get().last(1).values()[0];
+               return !(data.correct);
+           }
+       };  
+
+       var s_choosing_2 = {
+       type: 's_choosing',
+       slide: "images/Experiment 2 Stimulus Materials_NEW/Evaluation Task/criticality_pic.jpg",
+       prompt: "How important do you think each player is for the outcome of the one-goal challenge?",
+       people: ['player1_deepred', 'player1_purple']
+       };
+
+
+//-------------------------------- Sun screen: Choosing to Know ------------//
+
+var loop_p_not_choosing_1 = [];
+    
+    var options0 = ['the dye in \"ColorShine\" contaminates groundwater.', 'the dye in \"ColorShine\" does not contaminate groundwater.']
+    var options1 = ['fails to mention the existence of the new study.', 'mentions the existence of the new study, but not what it finds.', 'mentions the existence of the new study and also what it finds.']
+    var options2 = ['only the report.', 'the report and the new study.']
+    var options3 = ['entirely unaware that \"ColorShine\" contaminates groundwater.', 'entirely aware that \"ColorShine\" contaminates grounwater.']
+    
+    var p_not_choosing_1 = {
+           type: 'survey-multi-choice',
+           questions: [
+               {
+                   prompt: 'A new study finds that ...',
+                   options: options0,
+                   horizontal: true
+               },
+               {
+                   prompt: 'A recently published research report ...',
+                   options: options1,
+                   horizontal: true
+               },
+               {
+                   prompt: 'Jack read... ',
+                   options: options2,
+                   horizontal: true
+               },
+               {
+                   prompt: 'Jack is ... ',
+                   options: options3,
+                   horizontal: true
+               }
+           
+           ],
+           preamble: '<div style="text-align:left;background-color:white; padding:20px; max-width:900px;">' +    
+            'Jack is the CEO of a company for paint and varnish. The company is planning to produce and sell a new exterior paint, \"ColorShine\" . ' +
+            'If launched, \"ColorShine\" would significantly increase the company\'s profits. <br><br> However, the new paint includes a new type of dye. It is possible that the dye poisons the groundwater if it is washed away in the rain. <br><br>'+
+            'If this was the case, using the new exterior paint \"ColorShine\" would still effectively vanquish outdoor furniture, but also lead to contamination of groundwater. <br><br>'+
+            'The decision is now with Jack. The new exterior paint will only go into production if Jack approves it. <br><br>'+
+            'There is a new scientific study showing that the dye in \"ColorShine\" does indeed contaminate groundwater.<br><br>'+
+            'Jack has read a research report that has recently been published summarizing existing research on the new enzyme. The report mentions the existence of the new study, but it does not mention what the study finds: the harmful effect of the dye in \"ColorShine\" on groundwater <br><br>'+
+            'Jack decided not to look into the new study and learn what the study finds. <br><br>'+
+            'This means that Jack is entirely unaware that \"ColorShine\" contaminates groundwater.',
+           on_finish: function(data){
+               // jspsych records responses as json strings
+               data.correct = (data.responses == '{"Q0":"the enzyme in \"GreenLine\" harms wildlife.","Q1":"fails to mention the existence of the new study.","Q2":"only the report.","Q3":"entirely unaware that \"GreenLine\" harms wildlife."}');
+           }
+       };
+
+       var fail_p_not_choosing_1 = {
+           timeline: [{
+               type: 'html-button-response',
+               stimulus: 'Unfortunately, you missed some of the comprehension ' +
+                   'questions.</p> <p> Please review the instructions again.',
+               choices: ['Review'],
+           }],
+           conditional_function: function(){
+               var data = jsPsych.data.get().last(1).values()[0];
+               return !(data.correct);
+           }
+       };
+       
+       var loop_node_p_not_choosing_1 = {
+           timeline: loop_s_choosing_1,
+           loop_function: function(data){
+               var data = jsPsych.data.get().last(1).values()[0];
+               return !(data.correct);
+           }
+       };  
+
+       var p_not_choosing_2 = {
+       type: 'p_not_choosing',
+       slide: "images/Experiment 2 Stimulus Materials_NEW/Evaluation Task/criticality_pic.jpg",
+       prompt: "How important do you think each player is for the outcome of the one-goal challenge?",
+       people: ['player1_deepred', 'player1_purple']
+       };
+
+        //----------------------------COMPREHENSION CHECK 1----------------------------//
+        var loop_timeline_1 = [];
+
+        var options_yn = ['Yes', 'No'];
+        var comprehension_qs_1 = {
+            type: 'survey-multi-choice',
+            questions: [
+                {
+                    prompt: 'In this <b>one-goal challenge</b>, one player missed and the other scored. Did the team succeed?',
+                    options: options_yn,
+                    horizontal: true
+                }
+            ],
+            preamble: '<img src="images/Experiment 2 Stimulus Materials_NEW/Comprehension Check/Check_OneGoal_OneFail_2.png"></img>',
+            on_finish: function(data){
+                // jspsych records responses as json strings
+                data.correct = (data.responses == '{"Q0":"Yes"}');
+            }
+        };
+
+        var fail_comprehension_1 = {
+            timeline: [{
+              type: 'instructions',
+              pages: [
+                  '<p>Unfortunately, you missed this question. </p>',
+                  '<img src="images/Experiment 2 Stimulus Materials_NEW/Introduction/Challenges/OneGoalChallenge_Pic.png"></img>' +
+                  '<br>Remember, in the <b>one-goal challenge, each player simultaneously shoots at a different goal. <br> If <b>at least one</b> player scores in their goal, the team succeeds.',
+                  '<p>You will now attempt this question again.</p>'
+                   ],
+              on_load: set_slider(),
+              show_clickable_nav: true,
+            }],
+            conditional_function: function(){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        };
+
+
+        var loop_node_1 = {
+            timeline: loop_timeline_1,
+            loop_function: function(data){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        };
+
+
+        //----------------------------COMPREHENSION CHECK 2----------------------------//
+        var loop_timeline_2 = [];
+
+        var comprehension_q_2 = {
+            type: 'survey-multi-choice',
+            questions: [
+                {
+                    prompt: 'In this <b>two-goal challenge</b>, one player missed and the other scored. Did the team succeed?',
+                    options: options_yn,
+                    horizontal: true
+                }
+            ],
+            preamble: '<img src="images/Experiment 2 Stimulus Materials_NEW/Comprehension Check/Check_TwoGoal_OneFail_2.png"></img>',
+            on_finish: function(data){
+                // jspsych records responses as json strings
+                data.correct = (data.responses == '{"Q0":"No"}');
+            }
+        }
+
+
+        var fail_comprehension_2 = {
+            timeline: [{
+              type: 'instructions',
+              pages: [
+                  '<p>Unfortunately, you missed this question. </p>',
+                  '<img src="images/Experiment 2 Stimulus Materials_NEW/Introduction/Challenges/TwoGoalChallenge_Pic.png"></img>' +
+                  '<br>Remember, in the <b>two-goal challenge</b>, each player simultaneously shoots at a different goal. <br> If <b>both</b> players score in their goal, the team succeeds.',
+                  '<p>You will now attempt this question again. </p>'
+                   ],
+              on_load: set_slider(),
+              show_clickable_nav: true,
+            }],
+            conditional_function: function(){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        }
+
+
+        var loop_node_2 = {
+            timeline: loop_timeline_2,
+            loop_function: function(data){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        }
+
+
+        //----------------------------PHASE 1----------------------------//
+        var criticality_start = {
+            type: 'instructions',
+            pages: [
+                '<img src="images/Experiment 2 Stimulus Materials_NEW/Introduction/FanClub_Pic.png"></img>' +
+                '<p>Great job! Now, imagine you are a member of FC Palm City\’s fan club. <br> As a fan representative, you and a few others have been chosen to watch the public challenges and evaluate new players.</p>' +
+                '<p>You will first be asked about how important you think players are for the outcomes of the challenges.</p>'
+                ],
+            on_load: set_slider(),
+            show_clickable_nav: true,
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.025);
+            }
+        };
+
+        var num_trials = full_trial_info.length + condensed_trial_info.length;
+
+        // var criticality_phase = {
+        //  type: 'test_plugin',
+        //  slide: "images/Experiment 2 Stimulus Materials_NEW/Evaluation Task/criticality_pic.jpg",
+        //  prompt: "How important do you think each player is for the outcome of the one-goal challenge?",
+        //  people: ['player1_deepred', 'player1_purple']
+        //};
+
+        var evaluation_start = {
+            type: 'instructions',
+            pages: [
+                '<p>Nice! Now you will see some cases where the games were actually played, and you will be asked to judge how responsible players are for the outcome.</p>'
+                ],
+            on_load: set_slider(),
+            show_clickable_nav: true,
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.025);
+            }
+        };
+
+        var shuffled_array = jsPsych.randomization.repeat(new_info, 1);
+        var condensed_trials = {
+            timeline_variables: shuffled_array,
+            timeline: [
+                {
+                  type: 'html-button-response',
+                  stimulus: function() {
+                      var html = '<img src="' + jsPsych.timelineVariable('intro_image',
+                          true) + '"></img><p class="image-prompt">' +
+                          jsPsych.timelineVariable('intro_prompt', true) + '</p>';
+                      return html;
+                  },
+                  choices: ['Continue']
+                },
+                {
+                  type: 'craftspeople',
+                  slide: jsPsych.timelineVariable('slide6'),
+                  prompt: jsPsych.timelineVariable('prompt6'),
+                  people: [jsPsych.timelineVariable('person')],
+                  data: { trial: jsPsych.timelineVariable('trial') }
+                }
+
+            ],
+            // sample: {
+            //     type: 'custom',
+            //     fn: order_condensed,
+            // },
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.03);
+            },
+        };
+
+        //----------------------------INSTRUCTIONS 2----------------------------//
+        var instructions2 = {
+            type: 'instructions',
+            pages: [
+                '<img src="images/Experiment 2 Stimulus Materials_NEW/Introduction/FanClub_Pic.png"></img>' +
+                '<p>Well done! As a member of FC Palm City’s fan club, you have evaluated the performances of various new players, which is an important tradition at the Club.</p>',
+                '<img src="images/Experiment 2 Stimulus Materials_NEW/Transition to Decision Task/You+FansInBackground.jpg" style="width:350px;"></img>' +
+                '<p>Now, we want you to change perspective. We would like you to put yourself in the shoes of a new soccer player at FC Palm City. You are about to participate in the public challenges. You know how important fans\’ opinions are at FC Palm City. </p>',
+                '<img src="images/Experiment 2 Stimulus Materials_NEW/Transition to Decision Task/YourSkillandOtherPlayersSkill.png"></img>' +
+                '<p>In addition, you will be told your own chance of scoring the goal and your potential teammates\’ chances of scoring the goal each trial. For example, in this challenge, you have a 20% chance of scoring a goal and your partner has an 80% chance of scoring a goal.</p>',
+                '<p>Before continuing, you will answer a few quick questions to ensure you understand the setup.</p>'
+                ],
+            on_load: set_slider(),
+            show_clickable_nav: true,
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.025);
+            }
+        };
+
+        //----------------------------COMPREHENSION CHECK 3----------------------------//
+        var loop_timeline_3 = [];
+
+        var options_decision = ['20%', '80%'];
+        var comprehension_q_3 = {
+            type: 'survey-multi-choice',
+            questions: [
+                {
+                    prompt: 'In this challenge, how likely are you to score a goal?',
+                    options: options_decision,
+                    horizontal: true
+                },
+                {
+                    prompt: 'In this challenge, how likely is your partner to score a goal?',
+                    options: options_decision,
+                    horizontal: true
+                }
+            ],
+            preamble: '<img src="images/Experiment 2 Stimulus Materials_NEW/Transition to Decision Task/ComprehensionCheck_Skills.png"></img>',
+            on_finish: function(data){
+                // jspsych records responses as json strings
+                data.correct = (data.responses == '{"Q0":"80%","Q1":"20%"}');
+            }
+        }
+
+
+        var fail_comprehension_3 = {
+            timeline: [{
+              type: 'instructions',
+              pages: [
+                  '<p>Unfortunately, you missed one or more of the questions. Please try again. </p>'
+                   ],
+              on_load: set_slider(),
+              show_clickable_nav: true,
+            }],
+            conditional_function: function(){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        }
+
+
+        var loop_node_3 = {
+            timeline: loop_timeline_3,
+            loop_function: function(data){
+                var data = jsPsych.data.get().last(1).values()[0];
+                return !(data.correct);
+            }
+        }
+
+        //----------------------------PHASE 2----------------------------//
+
+        var decision_start = {
+            type: 'instructions',
+            pages: [
+              '<p>Good job! New players usually can choose which challenge they want to take on, and with whom. For your final task, we will show you two different challenges, and you will decide which one you would rather play in.',
+              '<img src="images/Experiment 2 Stimulus Materials_NEW/Decision Task/1goal_2goal_20_20_80_a.png"></img>' +
+              '<br>For example, in this trial, you have a 20% chance of scoring a goal and would be deciding between a one-goal challenge where your teammate has a 20% chance of scoring a goal and a two-goal challenge where your teammate has an 80% chance of scoring a goal.</p>',
+              '<img src="images/Experiment 2 Stimulus Materials_NEW/Introduction/FanClub_Pic.png"></img>' +
+              '<p>You will now be shown pairs of similar challenges and asked which one you would rather play in. Remember that the fans will be evaluating the performance and judging how much credit each player deserves for success or how much blame they deserve for failure. </p>'
+                ],
+            on_load: set_slider(),
+            show_clickable_nav: true,
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.025);
+            }
+        };
+
+        //counterbalance images
+        var counterbalanced_trials = [];
+        let fLen = decision_info.length;
+        for (let i = 0; i < fLen; i++) {
+          var cb = Math.round(Math.random())
+          if(cb == 1) {
+            counterbalanced_trials.push(decision_info[i][0]);
+          }
+          else{
+            counterbalanced_trials.push(decision_info[i][1]);
+          }
+        }
+        var decision_shuffled = jsPsych.randomization.repeat(counterbalanced_trials, 1);
+
+
+        var decision_trials = {
+            timeline_variables: decision_shuffled,
+            timeline: [
+                {
+                  type: 'decision',
+                  slide: jsPsych.timelineVariable('image'),
+                  data: { trial: jsPsych.timelineVariable('trial') }
+                }
+
+            ],
+            // sample: {
+            //     type: 'custom',
+            //     fn: order_condensed,
+            // },
+            on_finish: function() {
+                var prog = jsPsych.getProgressBarCompleted();
+                jsPsych.setProgressBar(prog + 0.03);
+            },
+        };
+
+        // feedback form
+        // note: Prolific collects: country of birth, current country of
+        //       residence, employment status, first language, nationality,
+        //       sex, and student status
+
+        //----------------------------TIMELINE----------------------------//
+        timeline.push(welcome);
+        timeline.push(instructions);
+        //loop_timeline_0.push(comprehension_qs_0);
+        timeline.push(f_knowledge_1)
+        //loop_timeline_0.push(fail_comprehension_0);
+        //timeline.push(loop_node_0);
+        timeline.push(f_knowledge_2);
+        timeline.push(message_1);
+        //loop_timeline_0.push(comprehension_qs_0);
+        timeline.push(l_knowledge_1)
+        //loop_timeline_0.push(fail_comprehension_0);
+        //timeline.push(loop_node_0);
+        timeline.push(l_knowledge_2);
+        timeline.push(s_choosing_1)
+        //loop_timeline_0.push(fail_comprehension_0);
+        //timeline.push(loop_node_0);
+        timeline.push(s_choosing_2);
+        timeline.push(p_not_choosing_1)
+        //loop_timeline_0.push(fail_comprehension_0);
+        //timeline.push(loop_node_0);
+        timeline.push(p_not_choosing_2);
+
+        //loop_timeline_1.push(comprehension_qs_1);
+        //loop_timeline_1.push(fail_comprehension_1);
+        //timeline.push(loop_node_1);
+        //loop_timeline_2.push(comprehension_q_2);
+        //loop_timeline_2.push(fail_comprehension_2);
+        //timeline.push(loop_node_2);
+        //timeline.push(criticality_start);
+        //timeline.push(evaluation_start);
+        //timeline.push(condensed_trials);
+        //timeline.push(instructions2);
+        //loop_timeline_3.push(comprehension_q_3);
+        //loop_timeline_3.push(fail_comprehension_3);
+        //timeline.push(loop_node_3);
+        //timeline.push(decision_start);
+        //timeline.push(decision_trials);
+        timeline.push(feedback_demographics)
+
+        jsPsych.init({
+            timeline: timeline,
+            preload_images: all_images,
+            show_progress_bar: true,
+            auto_update_progress_bar: false,
+            on_finish: function() {
+                var data = jsPsych.data.get().filter([
+                    {trial_type: 'html-slider-response'},
+                    {trial_type: 'survey-html-form'},
+                    {trial_type: 'craftspeople'},
+                ]);
+                var values = data.values();
+
+		        // construct trials data
+            //     var ppl = ['c', 'b', 't'];
+		        // var trials = [];
+		        // for (var i = 0; i < num_trials; i++) {
+		        //     var temp = {};
+            //         temp["trial"] = values[i]['trial'];
+            //         for (var p = 0; p < ppl.length; p++) {
+            //             temp['resp_'+ppl[p]] = parseInt(values[i]['resp_'+ppl[p]]);
+            //         }
+            //         trials.push(temp);
+            //     }
+
+                // parse demographics and construct participant data
+		        var participant = JSON.parse(values[values.length-1]['responses']);
+                if (typeof participant.ethnicity == "undefined") {
+                    participant.ethnicity = "";
+                }
+                var participant_info = {
+                    "feedback": participant.feedback,
+                    "age": participant.age,
+                    "gender": participant.gender,
+                    "race": participant.race,
+                    "ethnicity": participant.ethnicity,
+                    "time": values[values.length-1]['time_elapsed']
+                };
+
+                proliferate.submit({
+                    "trials": trials,
+                    "participants": participant_info
+                });
+
+                $('#jspsych-content').css('margin-top', 'auto');
+                $('#jspsych-content').html('<div style="margin: auto;"> <p>' +
+                    ' Thank you for participating in this experiment! </p>' +
+                    '<p> Redirecting you back to Prolific... </p>');
+                setTimeout(function(){}, 300);
+            }
+        });
+    </script>
+</html>
