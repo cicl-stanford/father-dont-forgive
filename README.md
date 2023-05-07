@@ -1,22 +1,7 @@
-# Project name
+# Father, don't forgive them
 
-## General points
+### This repository contains the experiment, data, analyses and figured for the paper CogSci 2023 paper "Father, don't forgive them, for they could have known what they're doing" by Lara Kirfel, Xenia Bunk, Ro'i Zultan and Tobias Gerstenberg.
 
-- for folder and file names: 
-	+ don't use white space in either folder or filenames, use an underscore "_" instead
-	+ (almost always) use lower case only
-- always use relative paths in your code
-	+ for example, to save a figure from an R script inside the `code/R/` folder the path should be "../../figures/figure_name.pdf"
-- keep your folder structure organized
-	+ we recommend adhering to the folder structure in this repository 
-	+ more complex projects may have additional folders such as `videos/`, `papers/`, ...
-- note: some of the folders are empty except for a `.keep` file
-	+ the `.keep` file is just there to make sure that github includes the otherwise empty folder 
-	+ feel free to delete the `.keep` file once you've added another file to that folder
-- each code subfolder has a readme file that should be updated with information about the code scripts 
-- use github issues to keep track of any larger decisions that we make along the way 
-- make sure to create a slack channel for each project, link up the github repository with the slack channel, and add the people working on the project to the github repo and slack channel 
-- see our lab wiki for more help: https://github.com/cicl-stanford/wiki/wiki
 
 ## Repository structure 
 
@@ -35,7 +20,16 @@
 
 ### code 
 
-Put all your code here. Use a separate folder for scripts based on the programming language. 
+Contains all code including the R code for analyzing data and generating figures, written in R. (view a rendered file here).
+
+### docs
+
+contains all the experiment code. You can preview the experiments below:
+
+Experiment 1: <p><a href="https://www.w3schools.com/">Visit W3Schools.com!</a></p>
+Experiment 2a
+Experiment 2b
+Experiment 3
 
 #### experiments 
 
@@ -43,20 +37,14 @@ The experiments folder is for the online (or in lab) experiments. Each experimen
 
 ### data 
 
-Put your raw data files here. Any data wrangling to that file should happen in your code scripts. 
+contains anonymized data from all experiments. For each experiment:
+
+[...]study_X-responses.csv contains the response data (i.e. responsibilty judgments).
+
+[...]study_X-participants.csv contains demographic information and post-experiment feedback/comments from participants.
 
 ### figures 
 
-Save all your figures here. You may want to include additional subfolder here such as `plots/`, `diagrams/` etc. 
+contains all the figures from the paper (generated using the script in code/R).
 
-### papers 
 
-Put research papers here that are relevant for your project. 
-
-### presentation
-
-Put your project presentation here (e.g. your keynote, powerpoint, google slides, or pdf file).
-
-### writeup 
-
-Put all your writing here. This folder structure is likely to expand for more complex projects. For example, you could add a subfolders like folders `journal/cognition/submission/`, `proceedings/cogsci/resubmission/` etc. 
