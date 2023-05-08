@@ -25,9 +25,12 @@ See the rendered file <a href="https://cicl-stanford.github.io/father-dont-forgi
 
 contains all the experiment code. You can preview the experiments below:
 
-Experiment 1:<a href="https://cicl-stanford.github.io/father-dont-forgive/experiment1/index.html?condition=1">Click here!</a>
+Experiment 1: <a href="https://cicl-stanford.github.io/father-dont-forgive/experiment1/index.html?condition=1">Click here!</a>
+
 Experiment 2a:<a href="https://cicl-stanford.github.io/father-dont-forgive/experiment2a/index.html?condition=1">Click here!</a>
+
 Experiment 2b:<a href="https://cicl-stanford.github.io/father-dont-forgive/experiment2b/index.html?condition=1">Click here!</a>
+
 Experiment 3:<a href="https://cicl-stanford.github.io/father-dont-forgive/experiment3/index.html?condition=1">Click here!</a>
 
 
