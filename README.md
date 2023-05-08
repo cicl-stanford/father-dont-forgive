@@ -10,7 +10,6 @@ This repository contains the experiment, data, analyses and figured for the pape
 │   ├── R
 │   ├── bash
 │   ├── experiments
-│   └── python
 ├── data
 ├── figures
 
