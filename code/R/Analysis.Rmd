@@ -39,11 +39,11 @@ options(dplyr.summarise.inform = F)
 
 ```{r}
 # # Read in demographics data
-participants <- read.csv(file="../../../data/wilful_ignorance_full_study_1-participants.csv") %>% 
+participants <- read.csv(file="../../data/wilful_ignorance_full_study_1-participants.csv") %>% 
   select(-c(proliferate.condition, error))
 
 # # Read in response data
-responses <- read.csv(file="../../../data/wilful_ignorance_full_study_1-responses.csv") %>% 
+responses <- read.csv(file="../../data/wilful_ignorance_full_study_1-responses.csv") %>% 
   select(-c(proliferate.condition, error))
 
 # # Merge datafiles
@@ -136,9 +136,10 @@ Data1_desc.df <-Exp1.df%>%
 
 ```
 
-
 ##Analysis
+
 ### Setting contrasts
+
 ```{r, message=FALSE, warning=FALSE}
 contrasts(Exp1.df$Knowledge) = contr.sum(2)
 contrasts(Exp1.df$Intentionality) = contr.sum(2)
@@ -170,7 +171,9 @@ fit_belief_judgment
 
 
 ## Figures
+
 ### Set theme
+
 ```{r, message=FALSE, warning=FALSE}
 
 myTheme <-   theme(axis.title.x  = element_blank(), 
@@ -244,29 +247,30 @@ Fig1a + Fig1b +
   plot_annotation(tag_levels = "A") & 
   theme(plot.tag = element_text(face = 'bold', size = 20))
 
-ggsave(file="../../../figures/plots/experiment1.pdf",
+ggsave(file="../../figures/plots/experiment1.pdf",
        height = 8,
        width = 6)
 ```
 
 # Experiment 2: Manipulating Epistemic Inferences
+
 ## Read in data 
 
 ```{r}
 # # Read in demographics data
 # # Read data
-participants2 <- read.csv(file="../../../data/willful_ignorance_full_study_2-participants.csv") %>% 
+participants2 <- read.csv(file="../../data/willful_ignorance_full_study_2-participants.csv") %>% 
   select(-c(proliferate.condition, error))
 
-participants3 <- read.csv(file="../../../data/willful_ignorance_full_study_3-participants.csv") %>% 
+participants3 <- read.csv(file="../../data/willful_ignorance_full_study_3-participants.csv") %>% 
   select(-c(proliferate.condition, error))
 
 # # Read in response data
 
-responses2 <- read.csv(file="../../../data/willful_ignorance_full_study_2-responses.csv") %>% 
+responses2 <- read.csv(file="../../data/willful_ignorance_full_study_2-responses.csv") %>% 
   select(-c(proliferate.condition, error))
 
-responses3 <- read.csv(file="../../../data/willful_ignorance_full_study_3-responses.csv") %>% 
+responses3 <- read.csv(file="../../data/willful_ignorance_full_study_3-responses.csv") %>% 
   select(-c(proliferate.condition, error, 
             ignorance_scenario1, ignorance_scenario2, 
             ignorance_scenario1_response_counterfactual,
@@ -381,7 +385,6 @@ Data2_desc.df <-Exp2.df%>%
 
 ```
 
-
 ##Analysis
 
 ### Setting contrasts
@@ -416,6 +419,7 @@ fit_belief_judgment
 ```
 
 ## Analysis of Uncertainty Factor
+
 ```{r}
 Exp2b.df <- Exp2.df %>% 
   filter(Knowledge == "Ignorance") %>% 
@@ -426,6 +430,7 @@ contrasts(Exp2b.df$Uncertainty) = contr.sum(2)
 ```
 
 ### Responsibility Judgement
+
 ```{r, message=FALSE, warning=FALSE}
 
 fit_responsibility_judgment_uncertain = brm(formula = responsibility_rating ~  1 + Uncertainty + (1 | workerid) + (1 | scenario),
@@ -437,7 +442,9 @@ fit_responsibility_judgment_uncertain = brm(formula = responsibility_rating ~  1
 
 fit_responsibility_judgment_uncertain
 ```
+
 ###  Belief Judgement
+
 ```{r, message=FALSE, warning=FALSE}
 
 fit_belief_judgment_uncertain = brm(formula = belief_rating ~  1 + Uncertainty + (1 | workerid) + (1 | scenario),
@@ -452,8 +459,9 @@ fit_belief_judgment_uncertain
 ## Counterfactual Analysis
 
 ### Create Separate Dataframe
+
 ```{r}
-responses3c <- read.csv(file="../../../data/willful_ignorance_full_study_3-responses.csv") 
+responses3c <- read.csv(file="../../data/willful_ignorance_full_study_3-responses.csv") 
 
 Data2c.df <- merge(responses3c, participants3, by="workerid") %>% 
   select(workerid:ignorance_scenario2_response_counterfactual) %>% 
@@ -501,7 +509,9 @@ summary(fit_counterfactual_judgment)
 ```
 
 ## Figures
+
 ### Set theme
+
 ```{r}
 
 myTheme <-   theme(axis.title.x  = element_blank(), 
@@ -577,21 +587,22 @@ Fig2a + Fig2b +
   plot_annotation(tag_levels = "A") &
   theme(plot.tag = element_text(face = 'bold', size = 22))
 
-ggsave(file="../../../figures/plots/experiment2.pdf",
+ggsave(file="../../figures/plots/experiment2.pdf",
        height = 8,
        width = 7)
 ```
 
 # Experiment 3: Manipulating Action Model
+
 ## Read in data 
 
 ```{r}
 # # Read in demographics data
-participants <- read.csv(file="../../../data/willful_ignorance_study_4-participants.csv") %>% 
+participants <- read.csv(file="../../data/willful_ignorance_study_4-participants.csv") %>% 
   select(-c(proliferate.condition, error))
 
 # # Read in response data
-responses <- read.csv(file="../../../data/willful_ignorance_study_4-responses.csv") %>% 
+responses <- read.csv(file="../../data/willful_ignorance_study_4-responses.csv") %>% 
   select(-c(proliferate.condition, error))
 
 # # Merge datafiles
@@ -690,7 +701,60 @@ Data1_demo.df <-Data1.df%>%
    
 ```
 
+## Analysis
+
+### Responsibility Ratings
+
+```{r, message=FALSE, warning=FALSE}
+##################### Analysis
+#### Responsibility Rating
+
+contrasts(Exp4.df$Ignorance) = contr.sum(2)
+contrasts(Exp4.df$Action_Model) = contr.sum(2)
+
+#### Responsibility Rating
+
+fit_responsibility_judgment = brm(formula = responsibility_rating ~  1 + Action_Model*Ignorance + (1 | workerid) + (1 | scenario_type),
+                             data = Exp4.df,
+                             seed = 1,
+                             cores = 2)
+
+summary(fit_responsibility_judgment)
+
+```
+
+### Belief Ratings
+
+```{r, message=FALSE, warning=FALSE}
+#### Belief Rating
+
+fit_belief_judgment = brm(formula = belief_rating ~  1 + Action_Model*Ignorance + (1 | workerid) + (1 | scenario_type),
+                                  data = Exp4.df,
+                                  seed = 1,
+                                  cores = 2)
+
+summary(fit_belief_judgment)
+
+```
+
+### Reponsibility Ratings under Independent Action Model
+
+```{r, message=FALSE, warning=FALSE}
+Exp4b.df <- Exp4.df %>% 
+  filter(Action_Model == "Action Model: Independent")
+
+
+fit_responsibility_judgment2 = brm(formula = responsibility_rating ~  1 + Ignorance + (1 | workerid) + (1 | scenario_type),
+                             data = Exp4b.df,
+                             seed = 1,
+                             cores = 2)
+
+summary(fit_responsibility_judgment2)
+
+```
+
 ## Figures
+
 ### Set Theme
 
 ```{r}
@@ -769,59 +833,11 @@ Fig3a + Fig3b +
   plot_annotation(tag_levels = "A") & 
   theme(plot.tag = element_text(face = 'bold', size = 22))
 
-ggsave(file="../../../figures/plots/experiment3.pdf",
+ggsave(file="../../figures/plots/experiment3.pdf",
        height = 8,
        width = 7)
 ```
 
-## Analysis
-### Responsibility Ratings
 
-```{r, message=FALSE, warning=FALSE}
-##################### Analysis
-#### Responsibility Rating
-
-contrasts(Exp4.df$Ignorance) = contr.sum(2)
-contrasts(Exp4.df$Action_Model) = contr.sum(2)
-
-#### Responsibility Rating
-
-fit_responsibility_judgment = brm(formula = responsibility_rating ~  1 + Action_Model*Ignorance + (1 | workerid) + (1 | scenario_type),
-                             data = Exp4.df,
-                             seed = 1,
-                             cores = 2)
-
-summary(fit_responsibility_judgment)
-
-```
-
-### Belief Ratings
-```{r, message=FALSE, warning=FALSE}
-#### Belief Rating
-
-fit_belief_judgment = brm(formula = belief_rating ~  1 + Action_Model*Ignorance + (1 | workerid) + (1 | scenario_type),
-                                  data = Exp4.df,
-                                  seed = 1,
-                                  cores = 2)
-
-summary(fit_belief_judgment)
-
-```
-
-### Reponsibility Ratings under Independent Action Model
-
-```{r, message=FALSE, warning=FALSE}
-Exp4b.df <- Exp4.df %>% 
-  filter(Action_Model == "Action Model: Independent")
-
-
-fit_responsibility_judgment2 = brm(formula = responsibility_rating ~  1 + Ignorance + (1 | workerid) + (1 | scenario_type),
-                             data = Exp4b.df,
-                             seed = 1,
-                             cores = 2)
-
-summary(fit_responsibility_judgment2)
-
-```
 
 
