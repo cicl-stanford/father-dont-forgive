@@ -10,33 +10,28 @@ This repository contains the experiment, data, analyses and figured for the pape
 │   ├── R
 │   ├── bash
 │   ├── experiments
-│   └── python
 ├── data
 ├── figures
-├── papers
-├── presentation
-└── writeup
+
 ```
 
 ### code 
 
 Contains all code including the R code for analyzing data and generating figures, written in R. 
-See the rendered file here for
-
-Experiment 1,
-Experiment 2a, 
-Experiment 2b.
-Experiment 3.
+See the rendered file <a href="https://cicl-stanford.github.io/father-dont-forgive/">here</a>.
 
 
 ### docs
 
 contains all the experiment code. You can preview the experiments below:
 
-Experiment 1: <p><a href="https://cicl-stanford.github.io/willful_ignorance/experiment1/index.html?condition=1">Click here!</a></p>
-Experiment 2a: <p><a href="https://cicl-stanford.github.io/willful_ignorance/experiment2/index.html?condition=1">Click here!</a></p>
-Experiment 2b: <p><a href="https://cicl-stanford.github.io/willful_ignorance/experiment3/index.html?condition=1">Click here!</a></p>
-Experiment 3: <p><a href="https://cicl-stanford.github.io/willful_ignorance/experiment4/index.html?condition=1">Click here!</a></p>
+Experiment 1: <a href="https://cicl-stanford.github.io/father-dont-forgive/experiment1/index.html?condition=1">Click here!</a>
+
+Experiment 2a: <a href="https://cicl-stanford.github.io/father-dont-forgive/experiment2a/index.html?condition=1">Click here!</a>
+
+Experiment 2b: <a href="https://cicl-stanford.github.io/father-dont-forgive/experiment2b/index.html?condition=1">Click here!</a>
+
+Experiment 3: <a href="https://cicl-stanford.github.io/father-dont-forgive/experiment3/index.html?condition=1">Click here!</a>
 
 
 ### data 
