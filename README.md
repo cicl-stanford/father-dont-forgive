@@ -6,6 +6,20 @@ This repository contains the experiment, data, analyses and figured for the pape
 
 What someone knew matters for how we hold them responsible. In three studies, we explore people’s responsibility judgments for negative outcomes to knowledgeable versus ignorant agents. We manipulate whether agents arrived at their knowledge state unintentionally or willfully. In Experiment 1, agents who knew about the harmful consequences of their actions were judged highly responsible no matter how they came to know. In contrast, willfully ignorant agents were judged more responsible than unintentionally ignorant agents. Participants inferred that willfully ignorant agents were more likely to believe that their action might cause harm. When we explicitly stipulate the agents’ beliefs in Experiment 2, the ‘willful ignorance’ effect reduces but persists. Participants inferred that the willfully ignorant agent was more likely to have acted anyhow even if they had known. Explicitly stating whether the agent’s action depended on their knowledge further reduced the ‘willful ignorance’ effect in Experiment 3
 
+## Pre-registrations 
+
+<ul>
+  <li>the pre-registrations for all experiments may be accessed via the Open Science Framework <a href="https://osf.io/9tm3f/">here</a>.</li> 
+  <li>separate links for each experiment:</li>
+   <ul>
+      <li><a href="https://tinyurl.com/4m66js98">Experiment 1</a></li>
+      <li><a href="https://tinyurl.com/bdcf4zk2">Experiment 2a</a></li>
+      <li><a href="https://tinyurl.com/pzudyb2j">Experiment 2b</a></li>
+      <li><a href="tinyurl.com/4hdm3hyy">Experiment 3</a></li>
+    </ul>
+</ul> 
+
+
 ## Repository structure 
 
 ```
