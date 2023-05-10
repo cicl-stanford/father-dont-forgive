@@ -2,6 +2,9 @@
 
 This repository contains the experiment, data, analyses and figured for the paper CogSci 2023 paper "Father, don't forgive them, for they could have known what they're doing" by Lara Kirfel, Xenia Bunk, Ro'i Zultan and Tobias Gerstenberg.
 
+## Abstract
+
+What someone knew matters for how we hold them responsible. In three studies, we explore people’s responsibility judgments for negative outcomes to knowledgeable versus ignorant agents. We manipulate whether agents arrived at their knowledge state unintentionally or willfully. In Experiment 1, agents who knew about the harmful consequences of their actions were judged highly responsible no matter how they came to know. In contrast, willfully ignorant agents were judged more responsible than unintentionally ignorant agents. Participants inferred that willfully ignorant agents were more likely to believe that their action might cause harm. When we explicitly stipulate the agents’ beliefs in Experiment 2, the ‘willful ignorance’ effect reduces but persists. Participants inferred that the willfully ignorant agent was more likely to have acted anyhow even if they had known. Explicitly stating whether the agent’s action depended on their knowledge further reduced the ‘willful ignorance’ effect in Experiment 3
 
 ## Repository structure 
 
