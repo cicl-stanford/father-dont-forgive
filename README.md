@@ -1,6 +1,6 @@
 # Father, don't forgive them
 
-This repository contains the experiment, data, analyses and figured for the paper CogSci 2023 paper "Father, don't forgive them, for they could have known what they're doing" by Lara Kirfel, Xenia Bunk, Ro'i Zultan and Tobias Gerstenberg.
+This repository contains the experiment, data, analyses and figured for the paper CogSci 2023 paper <a href="https://psyarxiv.com/a87xm/">"Father, don't forgive them, for they could have known what they're doing"</a> by Lara Kirfel, Xenia Bunk, Ro'i Zultan and Tobias Gerstenberg.
 
 ## Abstract
 
