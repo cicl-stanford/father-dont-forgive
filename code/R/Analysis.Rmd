@@ -136,7 +136,8 @@ Data1_desc.df <-Exp1.df%>%
 
 ```
 
-##Analysis
+ 
+## Analysis
 
 ### Setting contrasts
 
@@ -235,7 +236,7 @@ Fig1b <- Exp1.df %>%
 #Show plot
 plot(Fig1b)
 
-ggsave(Fig1b, file="Fig1b.pdf", dpi=400, height = 4, width = 7)
+#ggsave(Fig1b, file="Fig1b.pdf", height = 4, width = 7)
 ```
 
 
