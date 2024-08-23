@@ -36,13 +36,9 @@
       flex-direction: row;
       justify-content: space-between;
     }
-<<<<<<< Updated upstream
 
-input[type=range] {
-=======
-    
+
     input[type=range] {
->>>>>>> Stashed changes
   -webkit-appearance: none;
   width: 100%;
   height: 7px;
@@ -60,17 +56,10 @@ input[type=range] {
   width: 25px;
   height: 25px;
   border-radius: 100%;
-<<<<<<< Updated upstream
-  background: blue;
-  cursor: pointer;
-}
-
-=======
   background: red;
   cursor: pointer;
 }
     
->>>>>>> Stashed changes
   </style>;
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://unpkg.com/jspsych@7.2.3"></script>
@@ -381,19 +370,12 @@ input[type=range] {
         "scenario": scenarioList[i],
         "scenario_idx": scenarioIdx,
       },
-<<<<<<< Updated upstream
     on_load: function() {
     // console.log('setting slider...');
     slider_clicked = [false, false]
     set_slider(slider_clicked);
       },
     on_finish: function (data) {
-=======
-      on_start: function(trialCondition) {
-        set_slider();
-      },
-      on_finish: function (data) {
->>>>>>> Stashed changes
         console.log(data);
         // store values
         var temp0 = data.response;
